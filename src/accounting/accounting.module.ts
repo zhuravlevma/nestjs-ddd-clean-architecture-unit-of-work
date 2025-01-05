@@ -11,12 +11,12 @@ import { FindReportByIdInPort } from './domain/ports/in/find-report-by-id.in-por
 import { FindPositionByIdOutPort } from './domain/ports/out/find-position-by-id.out-port';
 import { FindReportByIdOutPort } from './domain/ports/out/find-report-by-id.out-port';
 import { SaveReportOutPort } from './domain/ports/out/save-report.out-port';
-import { UowModule } from 'src/unit-of-work/uow.module';
+import { TypeORM } from 'src/typeorm/typeorm.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ReportOrmEntity, ReportPositionOrmEntity]),
-    UowModule,
+    TypeORM,
   ],
   controllers: [ReportController],
   providers: [

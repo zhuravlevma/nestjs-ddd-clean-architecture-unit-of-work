@@ -13,52 +13,52 @@ import { OrderOrmEntity } from './dal/orm-entities/order.orm-entity';
 import { WarehouseController } from './warehouse.controller';
 import { WarehouseOrmEntity } from './dal/orm-entities/warehouse.orm-entity';
 import { WarehouseRepository } from './dal/warehouse.repository';
-import { UowModule } from 'src/unit-of-work/uow.module';
-import { TypeOrmUnitOfWork } from 'src/unit-of-work/uow';
+import { TypeORM } from 'src/typeorm/typeorm.module';
 import { SaveReportOutPort } from 'src/accounting/domain/ports/out/save-report.out-port';
 import { AccountingModule } from 'src/accounting/accounting.module';
+import { TypeOrmClient } from 'src/typeorm/client';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([WarehouseOrmEntity, OrderOrmEntity]),
-        UowModule,
-        AccountingModule,
-    ],
-    controllers: [WarehouseController],
-    providers: [
-        WarehouseRepository,
-        {
-            provide: UpdateOrderInPort,
-            useFactory: (a, b, c, d) => new UpdateOrderInteractor(a, b, c, d),
-            inject: [
-                SaveWarehouseOutPort,
-                GetWarehouseWithOrderOutPort,
-                TypeOrmUnitOfWork,
-                SaveReportOutPort,
-            ],
-        },
-        {
-            provide: CreateWarehouseInPort,
-            useFactory: (a) => new CreateWarehouseInteractor(a),
-            inject: [SaveWarehouseOutPort],
-        },
-        {
-            provide: AddOrderInPort,
-            useFactory: (a, b) => new AddOrderInteractor(a, b),
-            inject: [GetWarehouseWithOrdersOutPort, SaveWarehouseOutPort],
-        },
-        {
-            provide: GetWarehouseWithOrdersOutPort,
-            useClass: WarehouseRepository,
-        },
-        {
-            provide: GetWarehouseWithOrderOutPort,
-            useClass: WarehouseRepository,
-        },
-        {
-            provide: SaveWarehouseOutPort,
-            useClass: WarehouseRepository,
-        },
-    ],
+  imports: [
+    TypeOrmModule.forFeature([WarehouseOrmEntity, OrderOrmEntity]),
+    TypeORM,
+    AccountingModule,
+  ],
+  controllers: [WarehouseController],
+  providers: [
+    WarehouseRepository,
+    {
+      provide: UpdateOrderInPort,
+      useFactory: (a, b, c, d) => new UpdateOrderInteractor(a, b, c, d),
+      inject: [
+        SaveWarehouseOutPort,
+        GetWarehouseWithOrderOutPort,
+        TypeOrmClient,
+        SaveReportOutPort,
+      ],
+    },
+    {
+      provide: CreateWarehouseInPort,
+      useFactory: (a) => new CreateWarehouseInteractor(a),
+      inject: [SaveWarehouseOutPort],
+    },
+    {
+      provide: AddOrderInPort,
+      useFactory: (a, b) => new AddOrderInteractor(a, b),
+      inject: [GetWarehouseWithOrdersOutPort, SaveWarehouseOutPort],
+    },
+    {
+      provide: GetWarehouseWithOrdersOutPort,
+      useClass: WarehouseRepository,
+    },
+    {
+      provide: GetWarehouseWithOrderOutPort,
+      useClass: WarehouseRepository,
+    },
+    {
+      provide: SaveWarehouseOutPort,
+      useClass: WarehouseRepository,
+    },
+  ],
 })
 export class WarehouseModule {}
