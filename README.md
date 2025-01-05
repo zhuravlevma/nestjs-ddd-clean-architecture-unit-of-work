@@ -7,9 +7,9 @@ patterns from DDD.
 ## Unit of work
 
 ```typescript
-return this.uow.runInTransaction(async (tx) => {
-  const updatedWh = await this.saveWh.saveWarehouse(warehouse, tx);
-  await this.saveReport.save(report, tx);
+return this.uow.runInTransaction(async () => {
+  const updatedWh = await this.saveWh.saveWarehouse(warehouse);
+  await this.saveReport.save(report);
   return updatedWh;
 });
 ```
